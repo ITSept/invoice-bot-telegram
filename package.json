@@ -1,0 +1,19 @@
+{
+  "name": "rasty-invoice-bot",
+  "version": "1.0.0",
+  "description": "Telegram bot for generating invoices",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "keywords": [],
+  "author": "itsept",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.x",
+    "html-pdf": "^3.x",
+    "moment": "^2.x",
+    "puppeteer": "^24.12.1",
+    "telegraf": "^4.x"
+  }
+}

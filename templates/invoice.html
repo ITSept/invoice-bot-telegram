@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+     <title>Invoice</title>
+     <style>
+          body {
+               font-family: Arial, sans-serif;
+               margin: 20mm;
+               font-size: 10pt;
+          }
+
+          .header {
+               display: flex;
+               align-items: center;
+               justify-content: center;
+               margin-bottom: 30px;
+               position: relative;
+          }
+
+          .header .logo-container {
+               position: absolute;
+               left: 0;
+               top: 50%;
+               transform: translateY(-50%);
+               margin-right: 20px;
+          }
+
+          .header .logo {
+               max-width: 100px;
+               height: auto;
+          }
+
+          .header-text {
+               text-align: center;
+               flex-grow: 1;
+          }
+
+          .header-text h1 {
+               margin: 0;
+               font-size: 16pt;
+               color: #000000;
+          }
+
+          .header-text p {
+               margin: 0;
+               font-size: 9pt;
+               color: #464646;
+          }
+
+          .header-line {
+               border: none;
+               /* Hapus border default browser */
+               border-top: 2px solid #333;
+               /* Buat garis tebal solid */
+               margin: 0 auto;
+               /* Tengah-kan garis */
+               width: 100%;
+               /* Lebar garis, bisa disesuaikan */
+               /* Opsional: Tambahkan sedikit gradien atau bayangan jika ingin lebih mirip Word */
+               /* box-shadow: 0 1px 1px rgba(0,0,0,0.2); */
+          }
+
+          .invoice-title {
+               text-align: center;
+               font-size: 14pt;
+               font-weight: bold;
+               margin-top: 20px;
+               margin-bottom: 30px;
+               text-transform: uppercase;
+          }
+
+          .details-section {
+               margin-bottom: 40px;
+               line-height: 1;
+          }
+
+          .details-section strong {
+               display: inline-block;
+               width: 80px;
+          }
+
+          .details-section .customer-name {
+               font-size: medium;
+               font-weight: bold;
+          }
+
+          table {
+               width: 100%;
+               border-collapse: collapse;
+               margin-bottom: 20px;
+          }
+
+          table th,
+          table td {
+               border: 1px solid #ddd;
+               padding: 8px;
+               /* Hapus text-align: right; dari sini */
+          }
+
+          table th {
+               background-color: #f2f2f2;
+               text-transform: uppercase;
+               text-align: center;
+               /* Tetap rata tengah untuk head tabel */
+          }
+
+          /* Aturan perataan untuk isi tabel (tbody) */
+          table tbody td:nth-child(1) {
+               /* Kolom No. */
+               text-align: center;
+          }
+
+          table tbody td:nth-child(2) {
+               /* Kolom Nama Produk */
+               text-align: left;
+          }
+
+          table tbody td:nth-child(3),
+          /* Kolom Qty */
+          table tbody td:nth-child(4),
+          /* Kolom Harga Satuan */
+          table tbody td:nth-child(5) {
+               /* Kolom Total */
+               text-align: right;
+          }
+
+          .totals-row td {
+               font-weight: bold;
+               /* Pastikan subtotal, dp, pelunasan tetap rata kanan */
+               text-align: right;
+          }
+
+          /* Tambahkan aturan spesifik untuk kolom total di totals-row agar tidak terpengaruh oleh colspan */
+          .totals-row td:last-child {
+               text-align: right;
+          }
+
+
+          .note {
+               margin-top: 50px;
+               margin-bottom: 100px;
+               font-size: 9pt;
+               color: #555;
+               line-height: 1.5;
+          }
+
+          .note ul {
+               padding: 0;
+               margin: 0;
+          }
+
+          .note li {
+               margin-bottom: 5px;
+          }
+
+          .signature {
+               margin-top: 50px;
+               text-align: right;
+          }
+
+          .signature p {
+               margin: 0;
+          }
+
+          .signature .shop-name {
+               font-weight: bold;
+               margin-top: 10px;
+          }
+
+          /* --- CSS BARU UNTUK FOOTER KIRI --- */
+          .footer-timestamp {
+               position: fixed;
+               /* atau absolute jika ingin relatif ke body */
+               bottom: 20mm;
+               /* Jarak dari bawah halaman */
+               left: 20mm;
+               /* Jarak dari kiri halaman */
+               font-size: 8pt;
+               color: #777;
+               opacity: 0.8;
+          }
+     </style>
+</head>
+
+<body>
+     <div class="header">
+          <div class="logo-container">
+               <img src="logo.png" alt="Rasty Shop Logo" class="logo">
+          </div>
+          <div class="header-text">
+               <h1>RASTY SHOP</h1>
+               <p>Jl. K.H.M. Yusuf Raya No.50, Mekar Jaya, </p>
+               <p>Kec. Sukmajaya, Kota Depok, Jawa Barat 16411</p>
+               <p>Telpon - 0851-0713-5655</p>
+          </div>
+     </div>
+
+     <hr class="header-line">
+
+     <div class="invoice-title">INVOICE</div>
+
+     <div class="details-section">
+          <p><strong>No.</strong> : {{invoiceNo}}</p>
+          <p><strong>Tanggal</strong> : {{invoiceDate}}</p>
+          <p><strong>Kepada Yth.</strong> :</p>
+          <p class="customer-name">{{customerName}}</p>
+          <p>{{customerAddress}}</p>
+     </div>
+
+     <table>
+          <thead>
+               <tr>
+                    <th>No.</th>
+                    <th>Nama Produk</th>
+                    <th>Qty</th>
+                    <th>Harga Satuan</th>
+                    <th>Total</th>
+               </tr>
+          </thead>
+          <tbody>
+               {{invoiceItems}}
+               <tr class="totals-row">
+                    <td colspan="4">SubTotal</td>
+                    <td>{{subTotal}}</td>
+               </tr>
+               <tr class="totals-row">
+                    <td colspan="4">DP 50%</td>
+                    <td>{{dp}}</td>
+               </tr>
+               <tr class="totals-row">
+                    <td colspan="4">Pelunasan</td>
+                    <td>{{pelunasan}}</td>
+               </tr>
+          </tbody>
+     </table>
+
+     <div class="note">
+          <p><strong>Catatan Penting:</strong></p>
+          <ul>
+               <li>Pembayaran dapat dilakukan melalui <strong style="color: #000000;"> Rekening BCA No.
+                         8692204653 a.n.
+                         MASBUKHIN JOKO
+                         PRASETYO</strong>.</li>
+               <li>Harga yang tertera pada invoice ini belum termasuk biaya pengiriman (ONGKOS KIRIM) dan biaya kemasan
+                    tambahan (EXTRA
+                    PACKING).</li>
+          </ul>
+     </div>
+
+     <div class="signature">
+          <p>Terimakasih,</p>
+          <p class="shop-name">Rasty Shop</p>
+          <p>Joko Prasetyo</p>
+     </div>
+     <div class="footer-timestamp">
+          Invoice dicetak pada: {{timestamp}}
+     </div>
+</body>
+
+</html>
